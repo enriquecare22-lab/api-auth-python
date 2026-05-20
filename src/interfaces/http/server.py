@@ -1,19 +1,20 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
+from src.interfaces.http.routes import handle_request
 
 
 class RequestHandler(BaseHTTPRequestHandler):
 
     def do_GET(self):
-        self.send_response(200)
-        self.end_headers()
+        handle_request(self)
 
-        self.wfile.write(b"Auth API Running")
+    def do_POST(self):
+        handle_request(self)
 
 
 def run_server():
     server = HTTPServer(
         ("localhost", 8000),
-        RequestHandler
+        RequestHandler,
     )
 
     print("Server running on http://localhost:8000")
