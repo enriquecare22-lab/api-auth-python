@@ -61,3 +61,21 @@ class UserRepository:
         conn.close()
 
         return users
+
+    def get_by_id(self, user_id: str):
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        cursor.execute(
+            """
+            SELECT id , email, role FROM users WHERE id =%s
+            """,
+            (user_id,),
+        )
+
+        row = cursor.fetchone()
+
+        cursor.close()
+        conn.close()
+
+        return row

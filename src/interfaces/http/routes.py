@@ -3,6 +3,7 @@ import json
 from src.application.use_cases.register_user import RegisterUserUseCase
 from src.application.use_cases.login_user import LoginUserUseCase
 from src.application.use_cases.get_users import GetUsersUseCase
+from src.application.use_cases.get_profile import GetProfileUseCase
 
 from src.core.security import decode_access_token
 
@@ -123,10 +124,38 @@ def handle_request(handler):
 
             handler.wfile.write(json.dumps({"error": str(e)}).encode())
 
+    # ==============================
+    # GET ME
+    # ==============================
+    elif handler.path == "/me" and handler.command == "GET":
+        try:
+            auth_header = handler.headers.get("Authorization")
+            token = auth_header.split(" ")[1]
+            payload = decode_access_token(token)
+
+            get_profile = GetProfileUseCase()
+            profile = get_profile.execute(user_id=payload["sub"])
+            handler.send_response(200)
+            handler.send_header(
+                "Content-Type",
+                "application/json",
+            )
+            handler.end_headers()
+            handler.wfile.write(json.dumps(profile).encode())
+        except Exception as e:
+            handler.send_response(
+                "Content-Type",
+                "application/json",
+            )
+
+            handler.end_headers()
+
+            handler.wfile.write(
+                json.dumps({"error": str(e)}).encode(),
+            )
     else:
 
         handler.send_response(404)
-
         handler.end_headers()
 
         handler.wfile.write(b"Route not found")
