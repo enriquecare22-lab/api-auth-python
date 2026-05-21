@@ -14,7 +14,7 @@ class UserRepository:
             VALUES (%s, %s, %s)
             RETURNING id
             """,
-            (user.email, user.password, user.role)
+            (user.email, user.password, user.role),
         )
 
         user.id = cursor.fetchone()[0]
@@ -36,7 +36,7 @@ class UserRepository:
             FROM users
             WHERE email = %s
             """,
-            (email,)
+            (email,),
         )
 
         row = cursor.fetchone()
@@ -45,11 +45,19 @@ class UserRepository:
         conn.close()
 
         if row:
-            return User(
-                id=row[0],
-                email=row[1],
-                password=row[2],
-                role=row[3]
-            )
+            return User(id=row[0], email=row[1], password=row[2], role=row[3])
 
         return None
+
+    def get_all(self):
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("""
+            SELECT id, email, role FROM users
+            """)
+        users = cursor.fetchall()
+        cursor.close()
+        conn.close()
+
+        return users
