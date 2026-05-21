@@ -17,9 +17,9 @@ def verify_password(password: str, hashed: str) -> bool:
     )
 
 
-def create_access_token(user_id: int, role: str):
+def create_access_token(user_id: str, role: str):
     payload = {
-        "sub": str(user_id),
+        "sub": user_id,
         "role": role,
         "exp": datetime.utcnow() + timedelta(hours=1),
     }
