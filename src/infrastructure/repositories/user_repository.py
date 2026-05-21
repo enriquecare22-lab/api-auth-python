@@ -17,7 +17,7 @@ class UserRepository:
             (user.email, user.password, user.role),
         )
 
-        user.id = cursor.fetchone()[0]
+        user.id = str(cursor.fetchone()[0])
 
         conn.commit()
 
