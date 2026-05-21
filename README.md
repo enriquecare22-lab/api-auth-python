@@ -8,14 +8,17 @@ Authentication API built with pure Python using the standard `http.server` modul
 
 ---
 
+
 # 🚀 Current Features
 
 * User registration endpoint
 * PostgreSQL integration
 * Password hashing with bcrypt
-* Clean Architecture
 * Pure Python HTTP Server
 * Environment configuration with dotenv
+* JWT authentication
+* Admin authorization system
+* Protected routes with access token
 
 ---
 
@@ -170,11 +173,69 @@ POST /register
 
 ---
 
-# 🔐 Authentication
+# 🔐 Login Endpoint
 
-Authentication and authorization features are currently in development.
+### Login User
+
+```http
+POST /login
+```
+
+### Request Body
+
+```json
+
+{
+  "email": "admin@mail.com",
+  "password": "123456"
+}
+```
+### Success Response
+
+{
+  "access_token": "JWT_TOKEN"
+}
+
+
 
 ---
+
+# 👑 Admin Endpoint
+
+```md
+### Get Users (Admin Only)
+
+```http
+GET /users
+```
+## Headers
+```http
+Authorization: Bearer JWT_TOKEN
+```
+### Success response
+
+[
+  {
+    "id": 1,
+    "email": "admin@mail.com",
+    "role": "admin"
+  }
+]
+
+# 🔐 JWT Authentication
+
+This project uses JWT (JSON Web Token) for authentication and authorization.
+
+##  Authentication Features
+* JWT access token generation
+* Token validation middleware
+* Protected admin routes
+* Role-based authorization
+* Secure authentication flow
+
+### Authorization Header
+Authorization: Bearer YOUR_TOKEN
+
 
 # 👑 Roles
 
